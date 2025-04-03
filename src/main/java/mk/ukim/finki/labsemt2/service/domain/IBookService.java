@@ -7,11 +7,21 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IBookService {
-
+    //regular
     List<Book> findAll();
     Optional<Book> findById(long id);
     void deleteById(long id);
     Optional<Book> save(Book book);
     Optional<Book> update(long id,Book book);
+
+    //wishlist
+    void addBookToWishList(Long id);
+    void removeBookFromWishList(Long id);
+    List<Book> findAllInWishList();
+    //rent
+    boolean rentAllFromWishList();
+    boolean rentBook(Long id);
+    void returnBook(Long id);
+
 
 }

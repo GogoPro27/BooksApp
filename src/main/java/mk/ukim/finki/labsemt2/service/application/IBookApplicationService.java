@@ -13,4 +13,13 @@ public interface IBookApplicationService {
     void deleteById(long id);
     Optional<DisplayBookDto> save(CreateBookDto book);
     Optional<DisplayBookDto> update(long id,CreateBookDto book);
+
+    //wishlist
+    void addBookToWishList(Long id);
+    void removeBookFromWishList(Long id);
+    List<DisplayBookDto> findAllInWishList();
+    //rent
+    boolean rentAllFromWishList();
+    boolean rentBook(Long id);
+    void returnBook(Long id);
 }

@@ -98,4 +98,6 @@ public class UserService implements IUserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findById(username).orElseThrow();
     }
+
+
 }
