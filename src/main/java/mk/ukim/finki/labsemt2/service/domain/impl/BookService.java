@@ -18,12 +18,14 @@ public class BookService implements IBookService {
     private final BookRepository bookRepository;
     private final UserService userService;
     private final UserRepository userRepository;
+    private final BookLogService bookLogService;
 
 
-    public BookService(BookRepository bookRepository, UserService userService, UserRepository userRepository) {
+    public BookService(BookRepository bookRepository, UserService userService, UserRepository userRepository, BookLogService bookLogService) {
         this.bookRepository = bookRepository;
         this.userService = userService;
         this.userRepository = userRepository;
+        this.bookLogService = bookLogService;
     }
 
     @Override
@@ -38,12 +40,15 @@ public class BookService implements IBookService {
 
     @Override
     public void deleteById(long id) {
+        bookLogService.saveFromIdAndAction(id,"DELETED");
         bookRepository.deleteById(id);
     }
 
     @Override
     public Optional<Book> save(Book book) {
-        return Optional.of(bookRepository.save(book));
+        Book book1 = bookRepository.save(book);
+        bookLogService.saveFromIdAndAction(book1.getId(),"SAVED");
+        return Optional.of(book1);
     }
 
     @Override
@@ -61,7 +66,9 @@ public class BookService implements IBookService {
             if(book.getAvailableCopies()!=null){
                 b.setAvailableCopies(book.getAvailableCopies());
             }
-            return bookRepository.save(b);
+            Book book1 =  bookRepository.save(b);
+            bookLogService.saveFromIdAndAction(book1.getId(),"UPDATED");
+            return book1;
         });
     }
 
@@ -72,14 +79,18 @@ public class BookService implements IBookService {
 
         authUser.getBookWishlist().add(book);
         userRepository.save(authUser);
+        bookLogService.saveFromIdAndAction(id,String.format("ADDED TO %s'S WISHLIST",authUser.getUsername()));
     }
 
     @Override
     public void removeBookFromWishList(Long id) {
         User authUser = userService.getAuthenticatedUser();
 
-        authUser.getBookWishlist().removeIf(b->b.getId().equals(id));
+        boolean isRemoved = authUser.getBookWishlist().removeIf(b->b.getId().equals(id));
         userRepository.save(authUser);
+        if (isRemoved)
+            bookLogService.saveFromIdAndAction(id,String.format("REMOVED FROM %s'S WISHLIST",authUser.getUsername()));
+
     }
 
     @Override
@@ -105,7 +116,7 @@ public class BookService implements IBookService {
         book.setAvailableCopies(book.getAvailableCopies()-1);
         bookRepository.save(book);
         userRepository.save(authUser);
-
+        bookLogService.saveFromIdAndAction(id,String.format("RENTED BY %s'",authUser.getUsername()));
         return true;
     }
 
@@ -117,5 +128,17 @@ public class BookService implements IBookService {
         book.setAvailableCopies(book.getAvailableCopies()+1);
         userRepository.save(authUser);
         bookRepository.save(book);
+        bookLogService.saveFromIdAndAction(id,String.format("RETURNED BY %s'",authUser.getUsername()));
+
+    }
+
+    public String bookToLog(Book book) {
+        return String.format("Book[id=%d, name='%s', author='%s %s', category=%s, availableCopies=%d]",
+                book.getId(),
+                book.getName(),
+                book.getAuthor().getName(),
+                book.getAuthor().getSurname(),
+                book.getCategory(),
+                book.getAvailableCopies());
     }
 }

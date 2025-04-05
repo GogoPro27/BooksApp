@@ -2,11 +2,19 @@ package mk.ukim.finki.labsemt2.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import mk.ukim.finki.labsemt2.model.domain.Logs.BookLog;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateBookDto;
 import mk.ukim.finki.labsemt2.service.application.impl.BookApplicationService;
+import mk.ukim.finki.labsemt2.service.application.impl.BookLogApplicationService;
+import mk.ukim.finki.labsemt2.service.domain.impl.BookLogService;
+import mk.ukim.finki.labsemt2.service.domain.impl.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Collection;
 
 
 @RequestMapping("/api/books")
@@ -15,10 +23,16 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     private final BookApplicationService bookApplicationService;
+    private final BookLogApplicationService bookLogApplicationService;
+    private final BookService bookService;
+    private final BookLogService bookLogService;
 
 
-    public BookController(BookApplicationService bookApplicationService) {
+    public BookController(BookApplicationService bookApplicationService, BookLogApplicationService bookLogApplicationService, BookService bookService, BookLogService bookLogService) {
         this.bookApplicationService = bookApplicationService;
+        this.bookLogApplicationService = bookLogApplicationService;
+        this.bookService = bookService;
+        this.bookLogService = bookLogService;
     }
 
     @GetMapping
@@ -51,7 +65,6 @@ public class BookController {
         bookApplicationService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
 
 
     @PostMapping("/wishlist/add/{id}")
@@ -96,5 +109,21 @@ public class BookController {
         bookApplicationService.returnBook(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/booklogs")
+    public ResponseEntity<List<BookLog>> getAllBookLogs() {
+        List<BookLog> bookLogs = bookService.findAll().stream()
+                .map(b->bookLogService.findAllByBookId(b.getId()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(bookLogs, HttpStatus.OK);
+    }
+    @GetMapping("/booklogs/{bookId}")
+    public ResponseEntity<?> getBookLogForBook(@PathVariable Long bookId) {
+        List<BookLog> bookLogs = bookLogApplicationService.findAllByBookId(bookId);
+        return ResponseEntity.status(HttpStatus.OK).body(bookLogs);
+    }
+
 
 }

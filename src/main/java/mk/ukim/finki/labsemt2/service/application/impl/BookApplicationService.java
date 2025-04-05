@@ -7,6 +7,7 @@ import mk.ukim.finki.labsemt2.model.dto.display.DisplayBookDto;
 import mk.ukim.finki.labsemt2.model.dto.display.DisplayUserDto;
 import mk.ukim.finki.labsemt2.service.application.IBookApplicationService;
 import mk.ukim.finki.labsemt2.service.domain.impl.AuthorService;
+import mk.ukim.finki.labsemt2.service.domain.impl.BookLogService;
 import mk.ukim.finki.labsemt2.service.domain.impl.BookService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,13 @@ import java.util.Optional;
 public class BookApplicationService implements IBookApplicationService{
     public final BookService bookService;
     public final AuthorService authorService;
+//    public final BookApplicationService bookApplicationService;
 
 
     public BookApplicationService(BookService bookService, AuthorService authorService) {
         this.bookService = bookService;
         this.authorService = authorService;
+
     }
 
 
@@ -40,6 +43,8 @@ public class BookApplicationService implements IBookApplicationService{
 
     @Override
     public void deleteById(long id) {
+        Book book = bookService.findById(id).orElseThrow();
+//        bookLogService.saveFromIdAndAction();
         bookService.deleteById(id);
     }
 
