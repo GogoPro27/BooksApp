@@ -3,7 +3,7 @@ package mk.ukim.finki.labsemt2.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateAuthorDto;
-import mk.ukim.finki.labsemt2.service.application.impl.AuthorApplicationService;
+import mk.ukim.finki.labsemt2.service.application.IAuthorApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Authors", description = "Author management API for librarians")
 public class AuthorController {
 
-    private final AuthorApplicationService authorApplicationService;
+    private final IAuthorApplicationService authorApplicationService;
 
-    public AuthorController(AuthorApplicationService authorApplicationService) {
+    public AuthorController(IAuthorApplicationService authorApplicationService) {
         this.authorApplicationService = authorApplicationService;
     }
 
@@ -48,5 +48,17 @@ public class AuthorController {
     public ResponseEntity<?> deleteBook(@PathVariable Long id) {
         authorApplicationService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/by-author")
+    @Operation(summary = "List number of books per author for every author")
+    public ResponseEntity<?> findAllNumberOfBooksPerAuthor() {
+        return ResponseEntity.status(HttpStatus.OK).body(authorApplicationService.findAllBooksPerAuthor());
+    }
+
+    @GetMapping("/by-author/{id}")
+    @Operation(summary = "List number of books per author for a given author")
+    public ResponseEntity<?> findNumberOfBooksPerAuthor(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(authorApplicationService.findBooksPerAuthor(id));
     }
 }

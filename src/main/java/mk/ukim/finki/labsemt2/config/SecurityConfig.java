@@ -42,34 +42,34 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(
-                        corsConfigurationSource()))
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/auth/**").permitAll()
-
-                        .requestMatchers(
-                                "/api/books/add", "/api/books/delete/**", "/api/books/edit/**",
-                                "/api/authors/add", "/api/authors/edit/**", "/api/authors/delete/**",
-                                "/api/countries/add", "/api/countries/edit/**", "/api/countries/delete/**"
-                        ).hasRole("LIBRARIAN")
-
-                        .anyRequest().authenticated()
-                )
-                .formLogin((form) -> form.loginProcessingUrl(
-                                "/api/auth/login")
-                        .permitAll()
-                        .failureUrl("/api/auth/login?error=BadCredentials")
-                        .defaultSuccessUrl(
-                                "/swagger-ui/index.html",
-                                true
-                        ))
-                .logout((logout) -> logout.logoutUrl("/api/auth/logout")
-                        .clearAuthentication(true)
-                        .invalidateHttpSession(
-                                true)
-                        .deleteCookies("JSESSIONID")
-                        .logoutSuccessUrl("/api/auth/login"))
-                .exceptionHandling((ex) -> ex.accessDeniedPage(
-                        "/access_denied"));
+                        corsConfigurationSource()));
+//                .authorizeHttpRequests(requests -> requests
+//                        .requestMatchers("/api/auth/**").permitAll()
+//
+//                        .requestMatchers(
+//                                "/api/books/add", "/api/books/delete/**", "/api/books/edit/**",
+//                                "/api/authors/add", "/api/authors/edit/**", "/api/authors/delete/**",
+//                                "/api/countries/add", "/api/countries/edit/**", "/api/countries/delete/**"
+//                        ).hasRole("LIBRARIAN")
+//
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin((form) -> form.loginProcessingUrl(
+//                                "/api/auth/login")
+//                        .permitAll()
+//                        .failureUrl("/api/auth/login?error=BadCredentials")
+//                        .defaultSuccessUrl(
+//                                "/swagger-ui/index.html",
+//                                true
+//                        ))
+//                .logout((logout) -> logout.logoutUrl("/api/auth/logout")
+//                        .clearAuthentication(true)
+//                        .invalidateHttpSession(
+//                                true)
+//                        .deleteCookies("JSESSIONID")
+//                        .logoutSuccessUrl("/api/auth/login"))
+//                .exceptionHandling((ex) -> ex.accessDeniedPage(
+//                        "/access_denied"));
         return http.build();
     }
 

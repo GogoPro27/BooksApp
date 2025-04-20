@@ -7,6 +7,7 @@ import mk.ukim.finki.labsemt2.model.domain.Enum.Category;
 
 @Entity
 @Data
+@Table(name = "book")
 public class Book {
     public Book() {
 

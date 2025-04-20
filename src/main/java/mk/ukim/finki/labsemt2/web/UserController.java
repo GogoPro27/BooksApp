@@ -6,19 +6,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateUserDto;
 import mk.ukim.finki.labsemt2.model.dto.display.DisplayUserDto;
 import mk.ukim.finki.labsemt2.model.dto.login.LoginUserDto;
-import mk.ukim.finki.labsemt2.service.application.impl.UserApplicationService;
+import mk.ukim.finki.labsemt2.model.projections.UserProjection;
+import mk.ukim.finki.labsemt2.service.application.IUserApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "User API", description = "Endpoints for user authentication and registration") // Swagger tag
 public class UserController {
-    private final UserApplicationService userApplicationService;
+    private final IUserApplicationService userApplicationService;
 
-    public UserController(UserApplicationService userApplicationService) {
+    public UserController(IUserApplicationService userApplicationService) {
+
         this.userApplicationService = userApplicationService;
     }
 
@@ -53,5 +57,10 @@ public class UserController {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.ok(userDetails);
+    }
+
+    @GetMapping("/names")
+    public List<UserProjection> getAllUserNames() {
+        return userApplicationService.getAllUserNames();
     }
 }

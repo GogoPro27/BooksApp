@@ -3,6 +3,7 @@ package mk.ukim.finki.labsemt2.service.domain.impl;
 import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.labsemt2.model.domain.Enum.Role;
 import mk.ukim.finki.labsemt2.model.domain.User;
+import mk.ukim.finki.labsemt2.model.projections.UserProjection;
 import mk.ukim.finki.labsemt2.repository.UserRepository;
 import mk.ukim.finki.labsemt2.service.domain.IUserService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {
@@ -92,6 +95,11 @@ public class UserService implements IUserService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findById(username).orElseThrow();
+    }
+
+    @Override
+    public List<UserProjection> getAllUserNames() {
+        return userRepository.findAllProjectedBy();
     }
 
     @Override

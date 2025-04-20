@@ -3,7 +3,7 @@ package mk.ukim.finki.labsemt2.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateCountryDto;
-import mk.ukim.finki.labsemt2.service.application.impl.CountryApplicationService;
+import mk.ukim.finki.labsemt2.service.application.ICountryApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CountryController {
 
-    private final CountryApplicationService countryApplicationService;
+    private final ICountryApplicationService countryApplicationService;
 
-    public CountryController(CountryApplicationService countryApplicationService) {
+    public CountryController(ICountryApplicationService countryApplicationService) {
         this.countryApplicationService = countryApplicationService;
     }
 
@@ -48,5 +48,17 @@ public class CountryController {
     public ResponseEntity<?> deleteCountry(@PathVariable Long id) {
         countryApplicationService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/by-country")
+    @Operation(summary = "")
+    public ResponseEntity<?> findAllNumberOfAuthorsPerCountry() {
+        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findAllAuthorsPerCountry());
+    }
+
+    @GetMapping("/by-country/{id}")
+    @Operation(summary = "")
+    public ResponseEntity<?> findNumberOfAuthorsPerCountry(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findAuthorsPerCountry(id));
     }
 }

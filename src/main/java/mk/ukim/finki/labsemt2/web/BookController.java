@@ -3,7 +3,7 @@ package mk.ukim.finki.labsemt2.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateBookDto;
-import mk.ukim.finki.labsemt2.service.application.impl.BookApplicationService;
+import mk.ukim.finki.labsemt2.service.application.IBookApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class BookController {
 
-    private final BookApplicationService bookApplicationService;
+    private final IBookApplicationService bookApplicationService;
 
+    public BookController(IBookApplicationService bookApplicationService) {
 
-    public BookController(BookApplicationService bookApplicationService) {
         this.bookApplicationService = bookApplicationService;
     }
 
@@ -52,8 +52,6 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
-
-
     @PostMapping("/wishlist/add/{id}")
     @Operation(summary = "Add book to wishlist", description = "Adds a specific book to the authenticated user's wishlist")
     public ResponseEntity<?> addBookToWishList(@PathVariable Long id) {
@@ -73,8 +71,6 @@ public class BookController {
     public ResponseEntity<?> listAllInWishList() {
         return ResponseEntity.ok(bookApplicationService.findAllInWishList());
     }
-
-    // --- Rent Endpoints ---
 
     @PostMapping("/rent/all")
     @Operation(summary = "Rent all books from wishlist", description = "Rents all books present in the authenticated user's wishlist")

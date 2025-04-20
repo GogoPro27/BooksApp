@@ -4,11 +4,9 @@ import mk.ukim.finki.labsemt2.model.domain.Author;
 import mk.ukim.finki.labsemt2.model.domain.Book;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateBookDto;
 import mk.ukim.finki.labsemt2.model.dto.display.DisplayBookDto;
-import mk.ukim.finki.labsemt2.model.dto.display.DisplayUserDto;
 import mk.ukim.finki.labsemt2.service.application.IBookApplicationService;
-import mk.ukim.finki.labsemt2.service.domain.impl.AuthorService;
-import mk.ukim.finki.labsemt2.service.domain.impl.BookService;
-import org.springframework.context.annotation.Lazy;
+import mk.ukim.finki.labsemt2.service.domain.IAuthorService;
+import mk.ukim.finki.labsemt2.service.domain.IBookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +14,11 @@ import java.util.Optional;
 
 @Service
 public class BookApplicationService implements IBookApplicationService{
-    public final BookService bookService;
-    public final AuthorService authorService;
+    public final IBookService bookService;
+    public final IAuthorService authorService;
 
 
-    public BookApplicationService(BookService bookService, AuthorService authorService) {
+    public BookApplicationService(IBookService bookService, IAuthorService authorService) {
         this.bookService = bookService;
         this.authorService = authorService;
     }
