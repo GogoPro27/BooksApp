@@ -1,22 +1,22 @@
 CREATE TABLE country (
-                         id SERIAL PRIMARY KEY,
+                         id BIGSERIAL PRIMARY KEY,
                          name VARCHAR(255) NOT NULL,
                          continent VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE author (
-                        id SERIAL PRIMARY KEY,
+                        id BIGSERIAL PRIMARY KEY,
                         name VARCHAR(255) NOT NULL,
                         surname VARCHAR(255) NOT NULL,
-                        country_id INT REFERENCES country(id)
+                        country_id BIGINT REFERENCES country(id)
 );
 
 CREATE TABLE book (
-                      id SERIAL PRIMARY KEY,
+                      id BIGSERIAL PRIMARY KEY,
                       name VARCHAR(255) NOT NULL,
                       category VARCHAR(255) NOT NULL,
-                      author_id INT REFERENCES author(id),
-                      available_copies INT
+                      author_id BIGINT REFERENCES author(id),
+                      available_copies BIGINT
 );
 
 CREATE TABLE users (
@@ -28,12 +28,12 @@ CREATE TABLE users (
 
 CREATE TABLE user_book_wishlist (
                                     user_username VARCHAR(255) REFERENCES users(username),
-                                    book_id INT REFERENCES book(id),
+                                    book_id BIGINT REFERENCES book(id),
                                     PRIMARY KEY (user_username, book_id)
 );
 
 CREATE TABLE user_rented_books (
                                    user_username VARCHAR(255) REFERENCES users(username),
-                                   book_id INT REFERENCES book(id),
+                                   book_id BIGINT REFERENCES book(id),
                                    PRIMARY KEY (user_username, book_id)
 );

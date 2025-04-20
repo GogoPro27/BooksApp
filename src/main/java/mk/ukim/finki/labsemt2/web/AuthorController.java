@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateAuthorDto;
 import mk.ukim.finki.labsemt2.service.application.IAuthorApplicationService;
+import mk.ukim.finki.labsemt2.service.application.impl.CountryApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthorController {
 
     private final IAuthorApplicationService authorApplicationService;
+    private final CountryApplicationService countryApplicationService;
 
-    public AuthorController(IAuthorApplicationService authorApplicationService) {
+    public AuthorController(IAuthorApplicationService authorApplicationService, CountryApplicationService countryApplicationService) {
         this.authorApplicationService = authorApplicationService;
+        this.countryApplicationService = countryApplicationService;
     }
 
     @GetMapping
@@ -49,16 +52,15 @@ public class AuthorController {
         authorApplicationService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/by-author")
-    @Operation(summary = "List number of books per author for every author")
-    public ResponseEntity<?> findAllNumberOfBooksPerAuthor() {
-        return ResponseEntity.status(HttpStatus.OK).body(authorApplicationService.findAllBooksPerAuthor());
+    @GetMapping("/per-country")
+    @Operation(summary = "")
+    public ResponseEntity<?> findAllNumberOfAuthorsPerCountry() {
+        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findAllAuthorsPerCountry());
     }
 
-    @GetMapping("/by-author/{id}")
-    @Operation(summary = "List number of books per author for a given author")
-    public ResponseEntity<?> findNumberOfBooksPerAuthor(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(authorApplicationService.findBooksPerAuthor(id));
+    @GetMapping("/per-country/{id}")
+    @Operation(summary = "")
+    public ResponseEntity<?> findNumberOfAuthorsPerCountry(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findAuthorsPerCountry(id));
     }
 }

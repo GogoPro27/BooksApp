@@ -9,6 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface BooksPerAuthorViewRepository extends JpaRepository<BooksPerAuthorView,Long> {
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "REFRESH MATERIALIZED VIEW books_per_author", nativeQuery = true)
+    @Query(value = "REFRESH MATERIALIZED VIEW public.books_per_author", nativeQuery = true)
     void refreshMaterializedView();
 }

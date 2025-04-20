@@ -9,6 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AuthorsPerCountryViewRepository extends JpaRepository<AuthorsPerCountryView,Long> {
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "REFRESH MATERIALIZED VIEW authors_per_country", nativeQuery = true)
+    @Query(value = "REFRESH MATERIALIZED VIEW public.authors_per_country", nativeQuery = true)
     void refreshMaterializedView();
 }

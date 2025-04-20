@@ -50,15 +50,4 @@ public class CountryController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/by-country")
-    @Operation(summary = "")
-    public ResponseEntity<?> findAllNumberOfAuthorsPerCountry() {
-        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findAllAuthorsPerCountry());
-    }
-
-    @GetMapping("/by-country/{id}")
-    @Operation(summary = "")
-    public ResponseEntity<?> findNumberOfAuthorsPerCountry(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findAuthorsPerCountry(id));
-    }
 }
