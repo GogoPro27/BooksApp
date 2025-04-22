@@ -15,7 +15,6 @@ public interface IAuthorApplicationService {
     Optional<DisplayAuthorDto> save(CreateAuthorDto author);
     Optional<DisplayAuthorDto> update(long id,CreateAuthorDto author);
 
-    //views
      List<BooksPerAuthorView> findAllBooksPerAuthor();
      BooksPerAuthorView findBooksPerAuthor(Long id);
      void refreshMaterializedView();

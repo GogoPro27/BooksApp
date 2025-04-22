@@ -15,7 +15,7 @@ public interface ICountryApplicationService {
     void deleteById(long id);
     Optional<DisplayCountryDto> save(CreateCountryDto country);
     Optional<DisplayCountryDto> update(long id, CreateCountryDto country);
-    //view
+
     List<AuthorsPerCountryView> findAllAuthorsPerCountry();
     AuthorsPerCountryView findAuthorsPerCountry(Long id);
     void refreshMaterializedView();

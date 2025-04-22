@@ -1,9 +1,7 @@
 package mk.ukim.finki.labsemt2.service.domain.impl;
 
-import jakarta.transaction.Transactional;
 import mk.ukim.finki.labsemt2.model.domain.Book;
 import mk.ukim.finki.labsemt2.model.domain.User;
-import mk.ukim.finki.labsemt2.repository.AuthorRepository;
 import mk.ukim.finki.labsemt2.repository.BookRepository;
 import mk.ukim.finki.labsemt2.repository.UserRepository;
 import mk.ukim.finki.labsemt2.service.domain.IBookService;
@@ -66,8 +64,8 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void addBookToWishList(Long id) {
-        User authUser = userService.getAuthenticatedUser();
+    public void addBookToWishList(Long id, String token) {
+        User authUser = userService.getAuthenticatedUser(token);
         Book book = findById(id).orElseThrow();
 
         authUser.getBookWishlist().add(book);
@@ -75,33 +73,33 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void removeBookFromWishList(Long id) {
-        User authUser = userService.getAuthenticatedUser();
+    public void removeBookFromWishList(Long id, String token) {
+        User authUser = userService.getAuthenticatedUser(token);
 
         authUser.getBookWishlist().removeIf(b->b.getId().equals(id));
         userRepository.save(authUser);
     }
 
     @Override
-    public List<Book> findAllInWishList() {
-        return userService.getAuthenticatedUser().getBookWishlist();
+    public List<Book> findAllInWishList(String token) {
+        return userService.getAuthenticatedUser(token).getBookWishlist();
     }
 
     @Override
-    public boolean rentAllFromWishList() {
-        User user = userService.getAuthenticatedUser();
-        return !user.getBookWishlist().stream().map(b-> rentBook(b.getId())).toList().contains(false);
+    public boolean rentAllFromWishList(String token) {
+        User user = userService.getAuthenticatedUser(token);
+        return !user.getBookWishlist().stream().map(b-> rentBook(b.getId(), token)).toList().contains(false);
     }
 
     @Override
-    public boolean rentBook(Long id) {
+    public boolean rentBook(Long id, String token) {
         Book book = bookRepository.findById(id).orElseThrow();
         if (book.getAvailableCopies()==0){
             return false;
         }
-        User authUser = userService.getAuthenticatedUser();
+        User authUser = userService.getAuthenticatedUser(token);
         authUser.getRentedBooks().add(book);
-        removeBookFromWishList(id);
+        removeBookFromWishList(id, token);
         book.setAvailableCopies(book.getAvailableCopies()-1);
         bookRepository.save(book);
         userRepository.save(authUser);
@@ -110,9 +108,9 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void returnBook(Long id) {
+    public void returnBook(Long id, String token) {
         Book book = bookRepository.findById(id).orElseThrow();
-        User authUser = userService.getAuthenticatedUser();
+        User authUser = userService.getAuthenticatedUser(token);
         authUser.getRentedBooks().remove(book);
         book.setAvailableCopies(book.getAvailableCopies()+1);
         userRepository.save(authUser);

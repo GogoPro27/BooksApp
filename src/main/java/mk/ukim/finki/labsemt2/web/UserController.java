@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateUserDto;
 import mk.ukim.finki.labsemt2.model.dto.display.DisplayUserDto;
+import mk.ukim.finki.labsemt2.model.dto.login.LoginResponseDto;
 import mk.ukim.finki.labsemt2.model.dto.login.LoginUserDto;
 import mk.ukim.finki.labsemt2.model.projections.UserProjection;
 import mk.ukim.finki.labsemt2.service.application.IUserApplicationService;
@@ -39,18 +40,11 @@ public class UserController {
     }
     @Operation(summary = "User login", description = "Authenticates a user and starts a session")
     @PostMapping("/login")
-    public ResponseEntity<DisplayUserDto> login(@RequestBody LoginUserDto loginUserDto, HttpServletRequest request) {
-        DisplayUserDto body = userApplicationService.login(loginUserDto, request).orElseThrow();
-        System.out.println(body.role());
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginUserDto loginUserDto) {
+        LoginResponseDto body = userApplicationService.login(loginUserDto).orElseThrow();
         return ResponseEntity.ok(body);
     }
 
-    @Operation(summary = "User logout", description = "Ends the user's session")
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout() {
-        userApplicationService.logout();
-        return ResponseEntity.ok().build();
-    }
 
     @GetMapping("/role")
     public ResponseEntity<?> getRole(){

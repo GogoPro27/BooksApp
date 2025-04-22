@@ -2,7 +2,9 @@ package mk.ukim.finki.labsemt2.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateBookDto;
+import mk.ukim.finki.labsemt2.security.JwtConstants;
 import mk.ukim.finki.labsemt2.service.application.IAuthorApplicationService;
 import mk.ukim.finki.labsemt2.service.application.IBookApplicationService;
 import org.springframework.http.HttpStatus;
@@ -55,44 +57,50 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
+    public String extractTokenFromRequest(HttpServletRequest request){
+        String headerValue = request.getHeader(JwtConstants.HEADER);
+        return headerValue.substring(JwtConstants.TOKEN_PREFIX.length());
+    }
+
     @PostMapping("/wishlist/add/{id}")
     @Operation(summary = "Add book to wishlist", description = "Adds a specific book to the authenticated user's wishlist")
-    public ResponseEntity<?> addBookToWishList(@PathVariable Long id) {
-        bookApplicationService.addBookToWishList(id);
+    public ResponseEntity<?> addBookToWishList(@PathVariable Long id,HttpServletRequest request) {
+
+        bookApplicationService.addBookToWishList(id,extractTokenFromRequest(request));
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/wishlist/remove/{id}")
     @Operation(summary = "Remove book from wishlist", description = "Removes a specific book from the authenticated user's wishlist")
-    public ResponseEntity<?> removeBookFromWishList(@PathVariable Long id) {
-        bookApplicationService.removeBookFromWishList(id);
+    public ResponseEntity<?> removeBookFromWishList(@PathVariable Long id,HttpServletRequest request) {
+        bookApplicationService.removeBookFromWishList(id,extractTokenFromRequest(request));
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/wishlist")
     @Operation(summary = "List all books in wishlist", description = "Retrieves all books from the authenticated user's wishlist")
-    public ResponseEntity<?> listAllInWishList() {
-        return ResponseEntity.ok(bookApplicationService.findAllInWishList());
+    public ResponseEntity<?> listAllInWishList(HttpServletRequest request) {
+        return ResponseEntity.ok(bookApplicationService.findAllInWishList(extractTokenFromRequest(request)));
     }
 
     @PostMapping("/rent/all")
     @Operation(summary = "Rent all books from wishlist", description = "Rents all books present in the authenticated user's wishlist")
-    public ResponseEntity<?> rentAllFromWishList() {
-        boolean result = bookApplicationService.rentAllFromWishList();
+    public ResponseEntity<?> rentAllFromWishList(HttpServletRequest request) {
+        boolean result = bookApplicationService.rentAllFromWishList(extractTokenFromRequest(request));
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/rent/{id}")
     @Operation(summary = "Rent a book", description = "Rents a specific book by its ID from the available stock")
-    public ResponseEntity<?> rentBook(@PathVariable Long id) {
-        boolean result = bookApplicationService.rentBook(id);
+    public ResponseEntity<?> rentBook(@PathVariable Long id, HttpServletRequest request) {
+        boolean result = bookApplicationService.rentBook(id,extractTokenFromRequest(request));
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/return/{id}")
     @Operation(summary = "Return a rented book", description = "Returns a specific rented book by its ID, increasing available copies")
-    public ResponseEntity<?> returnBook(@PathVariable Long id) {
-        bookApplicationService.returnBook(id);
+    public ResponseEntity<?> returnBook(@PathVariable Long id, HttpServletRequest request) {
+        bookApplicationService.returnBook(id,extractTokenFromRequest(request));
         return ResponseEntity.ok().build();
     }
 

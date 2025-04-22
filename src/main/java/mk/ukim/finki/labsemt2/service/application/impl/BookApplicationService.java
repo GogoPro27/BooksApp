@@ -56,34 +56,34 @@ public class BookApplicationService implements IBookApplicationService{
     }
 
     @Override
-    public void addBookToWishList(Long id) {
-        bookService.addBookToWishList(id);
+    public void addBookToWishList(Long id, String token) {
+        bookService.addBookToWishList(id,token);
     }
 
     @Override
-    public void removeBookFromWishList(Long id) {
-        bookService.removeBookFromWishList(id);
+    public void removeBookFromWishList(Long id, String token) {
+        bookService.removeBookFromWishList(id,token);
     }
 
     @Override
-    public List<DisplayBookDto> findAllInWishList() {
-        return bookService.findAllInWishList().stream()
+    public List<DisplayBookDto> findAllInWishList(String token) {
+        return bookService.findAllInWishList(token).stream()
                 .map(DisplayBookDto::from)
                 .toList();
     }
 
     @Override
-    public boolean rentAllFromWishList() {
-        return bookService.rentAllFromWishList();
+    public boolean rentAllFromWishList(String token) {
+        return bookService.rentAllFromWishList(token);
     }
 
     @Override
-    public boolean rentBook(Long id) {
-        return bookService.rentBook(id);
+    public boolean rentBook(Long id, String token) {
+        return bookService.rentBook(id,token);
     }
 
     @Override
-    public void returnBook(Long id) {
-        bookService.returnBook(id);
+    public void returnBook(Long id, String token) {
+        bookService.returnBook(id,token);
     }
 }

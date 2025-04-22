@@ -11,14 +11,9 @@ import java.util.List;
 
 public interface IUserService extends UserDetailsService {
     User register(String username, String password, String repeatPassword, String name, Role role);
-
-    User login(String username, String password, HttpServletRequest request);
-
-    void logout();
-
-    User getAuthenticatedUser();
+    User login(String username, String password);
+    User getAuthenticatedUser(String token);
     User findByUsername(String username);
-
     List<UserProjection> getAllUserNames();
 
 }

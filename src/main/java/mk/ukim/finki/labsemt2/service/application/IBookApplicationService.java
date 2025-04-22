@@ -1,6 +1,5 @@
 package mk.ukim.finki.labsemt2.service.application;
 
-import mk.ukim.finki.labsemt2.model.domain.Book;
 import mk.ukim.finki.labsemt2.model.dto.create.CreateBookDto;
 import mk.ukim.finki.labsemt2.model.dto.display.DisplayBookDto;
 
@@ -14,12 +13,10 @@ public interface IBookApplicationService {
     Optional<DisplayBookDto> save(CreateBookDto book);
     Optional<DisplayBookDto> update(long id,CreateBookDto book);
 
-    //wishlist
-    void addBookToWishList(Long id);
-    void removeBookFromWishList(Long id);
-    List<DisplayBookDto> findAllInWishList();
-    //rent
-    boolean rentAllFromWishList();
-    boolean rentBook(Long id);
-    void returnBook(Long id);
+    void addBookToWishList(Long id, String token);
+    void removeBookFromWishList(Long id, String token);
+    List<DisplayBookDto> findAllInWishList(String token);
+    boolean rentAllFromWishList(String token);
+    boolean rentBook(Long id, String token);
+    void returnBook(Long id, String token);
 }
