@@ -8,6 +8,7 @@ import mk.ukim.finki.labsemt2.model.dto.login.LoginResponseDto;
 import mk.ukim.finki.labsemt2.model.dto.login.LoginUserDto;
 import mk.ukim.finki.labsemt2.model.projections.UserProjection;
 import mk.ukim.finki.labsemt2.security.JwtHelper;
+import mk.ukim.finki.labsemt2.service.application.IJwTokenApplicationService;
 import mk.ukim.finki.labsemt2.service.application.IUserApplicationService;
 import mk.ukim.finki.labsemt2.service.domain.IUserService;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,12 @@ import java.util.Optional;
 public class UserApplicationService implements IUserApplicationService {
     private final IUserService userService;
     private final JwtHelper jwtHelper;
+    private final IJwTokenApplicationService jwTokenApplicationService;
 
-    public UserApplicationService(IUserService userService, JwtHelper jwtHelper) {
+    public UserApplicationService(IUserService userService, JwtHelper jwtHelper, IJwTokenApplicationService jwTokenApplicationService) {
         this.userService = userService;
         this.jwtHelper = jwtHelper;
+        this.jwTokenApplicationService = jwTokenApplicationService;
     }
 
 
@@ -42,6 +45,7 @@ public class UserApplicationService implements IUserApplicationService {
         User user = userService.login(loginUserDto.username(),loginUserDto.password());
 
         String token = jwtHelper.generateToken(user);
+        jwTokenApplicationService.save(token);
         return Optional.of(new LoginResponseDto(token));
     }
 

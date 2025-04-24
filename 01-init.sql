@@ -37,3 +37,10 @@ CREATE TABLE user_rented_books (
                                    book_id BIGINT REFERENCES book(id),
                                    PRIMARY KEY (user_username, book_id)
 );
+CREATE TABLE jw_token (
+                          id BIGSERIAL PRIMARY KEY,
+                          token TEXT NOT NULL,
+                          username VARCHAR(255) NOT NULL,
+                          iat BIGINT NOT NULL,
+                          exp BIGINT NOT NULL
+);

@@ -41,10 +41,12 @@ public class JwtHelper {
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+    public Date extractIssuedAt(String token) {
+        return extractClaim(token, Claims::getIssuedAt);
+    }
     private String buildToken(
             Map<String, Object> extraClaims,
-            String subject,
-            Long expiration
+            String subject
     ) {
         return Jwts
                 .builder()
@@ -58,7 +60,7 @@ public class JwtHelper {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("roles", userDetails.getAuthorities());
-        return buildToken(extraClaims, userDetails.getUsername(), JwtConstants.EXPIRATION_TIME);
+        return buildToken(extraClaims, userDetails.getUsername());
     }
     private boolean isExpired(String token) {
         return extractExpiration(token).before(new Date());
