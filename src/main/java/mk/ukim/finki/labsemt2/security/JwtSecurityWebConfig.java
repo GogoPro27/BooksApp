@@ -53,16 +53,9 @@ public class JwtSecurityWebConfig {
                                         "/v3/api-docs/**",
                                         "/api/auth/register",
                                         "/api/auth/login"
-                                )
-                                .permitAll()
-//                                .requestMatchers(
-//                                        "/api/categories",
-//                                        "/api/manufacturers",
-//                                        "/api/products"
-//                                )
-//                                .hasAnyRole("USER", "ADMIN")
-                                .anyRequest()
-                                .hasAnyRole("USER", "ADMIN")
+                                ).permitAll()
+                                .requestMatchers("/api/jwts").hasAnyRole("ADMIN")
+                                .anyRequest().hasAnyRole("USER", "ADMIN")
                 )
                 .sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
