@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>mk.ukim.finki</groupId>
-    <artifactId>Labs-emt-2</artifactId>
+    <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Labs-emt-2</name>
     <description>Labs-emt-2</description>
